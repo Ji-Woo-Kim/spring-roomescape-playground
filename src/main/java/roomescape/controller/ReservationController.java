@@ -1,5 +1,6 @@
 package roomescape.controller;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.domain.Reservation;
@@ -15,8 +16,8 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
+@RequestMapping(value = "/reservations", produces = "application/json; charset=UTF-8")
 @RestController
-@RequestMapping("/reservations")
 public class ReservationController {
 
     private List<Reservation> reservations = new ArrayList<>();
@@ -38,24 +39,20 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<ReservationResponseDto> create(@RequestBody ReservationRequestDto requestDto) {
-        if (requestDto.getName().isEmpty() || requestDto.getDate().isEmpty() || requestDto.getTime().isEmpty()) {
+    public ResponseEntity<ReservationResponseDto> create(@Valid @RequestBody ReservationRequestDto requestDto) {
+        if (requestDto.getName().isEmpty() || requestDto.getDate() == null || requestDto.getTime() == null) {
             throw new InvalidReservationRequestException("필수 정보가 누락되었습니다.");
         }
 
-        Reservation newReservation = new Reservation(
-                index.getAndIncrement(),
-                requestDto.getName(),
-                LocalDate.parse(requestDto.getDate()),
-                LocalTime.parse(requestDto.getTime())
-        );
+        Reservation newReservation = requestDto.toEntity(index.getAndIncrement());
         reservations.add(newReservation);
+
         URI location = URI.create("/reservations/" + newReservation.getId());
         return ResponseEntity.created(location).body(new ReservationResponseDto(newReservation));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable long id) {
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
         Reservation reservation = reservations.stream()
                 .filter(it -> Objects.equals(it.getId(), id))
                 .findFirst()

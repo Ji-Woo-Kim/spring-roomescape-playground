@@ -2,16 +2,35 @@ package roomescape.dto;
 
 import roomescape.domain.Reservation;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
 public class ReservationResponseDto {
     private Long id;
     private String name;
-    private String date;
-    private String time;
+    private LocalDate date;
+    private LocalTime time;
 
     public ReservationResponseDto(Reservation reservation) {
         this.id = reservation.getId();
         this.name = reservation.getName();
-        this.date = reservation.getDate().toString();
-        this.time = reservation.getTime().toString();
+        this.date = reservation.getDate();
+        this.time = reservation.getTime();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public LocalTime getTime() {
+        return time;
     }
 }
