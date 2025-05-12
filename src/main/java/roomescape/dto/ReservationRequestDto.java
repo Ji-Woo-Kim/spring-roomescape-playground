@@ -2,11 +2,12 @@ package roomescape.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import roomescape.domain.Reservation;
+import lombok.Data;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
 
+@Data
 public class ReservationRequestDto {
 
     @NotBlank(message = "이름은 필수 입력 항목입니다.")
@@ -22,21 +23,5 @@ public class ReservationRequestDto {
         this.name = name;
         this.date = date;
         this.time = time;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public LocalDate getDate() {
-        return this.date;
-    }
-
-    public LocalTime getTime() {
-        return this.time;
-    }
-
-    public Reservation toEntity(Long id) {
-        return new Reservation(id, name, date, time);
     }
 }
