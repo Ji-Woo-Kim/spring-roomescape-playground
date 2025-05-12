@@ -2,7 +2,6 @@ package roomescape;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
@@ -93,5 +92,4 @@ public class MissionStepTest {
                 .then().log().all()
                 .statusCode(400);
     }
-
 }
