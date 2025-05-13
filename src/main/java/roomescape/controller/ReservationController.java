@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import roomescape.domain.*;
 import roomescape.dto.*;
-import roomescape.exception.*;
+import roomescape.exception.reservation.NotReservationFoundException;
 
 import java.net.URI;
 import java.util.*;
@@ -45,7 +45,7 @@ public class ReservationController {
         Reservation reservation = reservations.stream()
                 .filter(it -> Objects.equals(it.getId(), id))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundException("Reservation not found"));
+                .orElseThrow(() -> new NotReservationFoundException("Reservation not found"));
 
         reservations.remove(reservation);
 
