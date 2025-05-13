@@ -45,7 +45,7 @@ public class ReservationController {
         Reservation reservation = reservations.stream()
                 .filter(it -> Objects.equals(it.getId(), id))
                 .findFirst()
-                .orElseThrow(() -> new NotFoundReservationException("Reservation not found"));
+                .orElseThrow(() -> new NotFoundException("Reservation not found"));
 
         reservations.remove(reservation);
 

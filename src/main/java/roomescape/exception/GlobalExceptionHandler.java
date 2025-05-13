@@ -9,14 +9,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-    @ExceptionHandler(InvalidReservationRequestException.class)
-    public ResponseEntity<String> handleInvalidReservationRequest(InvalidReservationRequestException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
-    }
-
-    @ExceptionHandler(NotFoundReservationException.class)
-    public ResponseEntity<String> handleNotFoundReservation(NotFoundReservationException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    @ExceptionHandler(ReservationException.class)
+    public ResponseEntity<String> handleCustomExceptions(ReservationException ex) {
+        return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
