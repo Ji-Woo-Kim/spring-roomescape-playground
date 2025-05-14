@@ -1,6 +1,7 @@
 package roomescape.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import roomescape.dto.ReservationRequestDto;
 
@@ -9,6 +10,7 @@ import java.time.LocalTime;
 
 @Getter
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Reservation {
 
     private Long id;
