@@ -3,6 +3,7 @@ package roomescape.controller;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import roomescape.dao.ReservationDAO;
 import roomescape.domain.*;
 import roomescape.dto.*;
 import roomescape.exception.reservation.NotReservationFoundException;
@@ -14,17 +15,20 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController
 public class ReservationController {
 
-    private List<Reservation> reservations = new ArrayList<>();
-    private AtomicLong index = new AtomicLong(1);
+    private final ReservationDAO reservationDAO;
+
+    public ReservationController(ReservationDAO reservationDAO) {
+        this.reservationDAO = reservationDAO;
+    }
 
     @GetMapping("/reservation")
     public String reservationPage() {
         return "reservation";
     }
 
-    @GetMapping("/reservations")
+    @GetMapping("/reservations") //6단계 반영
     public ResponseEntity<List<ReservationResponseDto>> read() {
-        List<ReservationResponseDto> responseDtos = reservations.stream()
+        List<ReservationResponseDto> responseDtos = reservationDAO.findAll().stream()
                 .map(ReservationResponseDto::new)
                 .toList();
 
