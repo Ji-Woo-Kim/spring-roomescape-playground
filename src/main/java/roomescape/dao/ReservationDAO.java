@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import org.springframework.stereotype.Component;
 import roomescape.domain.Reservation;
+import roomescape.dto.ReservationRequestDto;
 
 @Component
 public class ReservationDAO {
@@ -20,8 +21,7 @@ public class ReservationDAO {
         // 드라이버 연결
         try {
             return DriverManager.getConnection(URL, USERNAME, PASSWORD);
-        }
-        catch (final SQLException e) {
+        } catch (final SQLException e) {
             System.err.println("DB 연결 오류:" + e.getMessage());
             e.printStackTrace();
             return null;
@@ -30,7 +30,12 @@ public class ReservationDAO {
 
     @PostConstruct
     public void createTable() {
-        final var query = "CREATE TABLE reservation(id long, name varchar(10), date varchar(10), time varchar(5));";
+        final var query = "CREATE TABLE reservation(" +
+                "id BIGINT PRIMARY KEY, " + // SQL에선 Long이 BIGINT
+                "name VARCHAR(10), " +
+                "date VARCHAR(10), " +
+                "time VARCHAR(5)" +
+                ");";
         try (
                 final var connection = getConnection();
                 final var preparedStatement = connection.prepareStatement(query)
@@ -43,7 +48,7 @@ public class ReservationDAO {
     }
 
     public void addReservation(final Reservation reservation) {
-        final var query = "INSERT INTO reservation VALUES(?, ? , ?, ?)";
+        final var query = "INSERT INTO reservation (id, name, date, time) VALUES(?, ? , ?, ?)";
         try (
                 final var connection = getConnection();
                 final var preparedStatement = connection.prepareStatement(query)
@@ -84,4 +89,34 @@ public class ReservationDAO {
         return null;
     }
 
+    public void updateReservation(final Long id, ReservationRequestDto reservationRequestDto) {
+        final var query = "UPDATE reservation SET name = ?, date = ?, time = ? WHERE id = ?";
+
+        try (
+                final var connection = getConnection();
+                final var preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setString(1, reservationRequestDto.getName());
+            preparedStatement.setString(2, reservationRequestDto.getDate().toString());
+            preparedStatement.setString(3, reservationRequestDto.getTime().toString());
+            preparedStatement.setLong(4, id);
+            preparedStatement.executeUpdate();
+        } catch (final SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteReservationById(final Long id) {
+        final var query = "DELETE FROM reservation WHERE id = ?";
+
+        try (
+                final var connection = getConnection();
+                final var preparedStatement = connection.prepareStatement(query)
+        ) {
+            preparedStatement.setLong(1, id);
+            preparedStatement.executeUpdate();
+        } catch (final SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
