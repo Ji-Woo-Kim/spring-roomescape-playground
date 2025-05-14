@@ -1,32 +1,22 @@
 package roomescape.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import roomescape.dto.ReservationRequestDto;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@Getter
+@AllArgsConstructor
 public class Reservation {
 
     private Long id;
     private String name;
-    private String date;
-    private String time;
+    private LocalDate date;
+    private LocalTime time;
 
-    public Reservation(Long id, String name, String date, String time) {
-        this.id = id;
-        this.name = name;
-        this.date = date;
-        this.time = time;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public String getTime() {
-        return time;
+    public static Reservation fromDto(Long id, ReservationRequestDto dto) {
+        return new Reservation(id, dto.getName(), dto.getDate(), dto.getTime());
     }
 }
