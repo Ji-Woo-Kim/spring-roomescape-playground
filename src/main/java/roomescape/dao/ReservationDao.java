@@ -18,13 +18,14 @@ public class ReservationDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public void addReservation(ReservationRequestDto dto) {
+    public Reservation addReservation(ReservationRequestDto dto) {
         jdbcTemplate.update(
                 "INSERT INTO reservation (name, date, time) VALUES (?, ?, ?)",
                 dto.getName(),
                 dto.getDate().toString(),
                 dto.getTime().toString()
         );
+        return null;
     }
 
     public Reservation findById(Long id) {
