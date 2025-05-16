@@ -4,6 +4,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import roomescape.domain.Reservation;
 import roomescape.dto.ReservationRequestDto;
+import roomescape.exception.reservation.NotReservationFoundException;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -25,7 +26,9 @@ public class ReservationDao {
                 dto.getDate().toString(),
                 dto.getTime().toString()
         );
-        return null;
+
+        Long id = jdbcTemplate.queryForObject("SELECT MAX(id) FROM reservation", Long.class);
+        return findById(id);
     }
 
     public Reservation findById(Long id) {
@@ -64,6 +67,9 @@ public class ReservationDao {
     }
 
     public void deleteReservationById(Long id) {
-        jdbcTemplate.update("DELETE FROM reservation WHERE id = ?", id);
+        int result = jdbcTemplate.update("DELETE FROM reservation WHERE id = ?", id);
+        if (result == 0) {
+            throw new NotReservationFoundException("존재하지 않는 예약입니다.");
+        }
     }
 }
