@@ -25,7 +25,7 @@ public class ReservationService {
         );
     }
 
-    public ReservationResponseDto addReservation(@Valid ReservationRequestDto requestDto) {
+    public ReservationResponseDto addReservation(ReservationRequestDto requestDto) {
         Reservation reservation = reservationDAO.addReservation(requestDto);
         return new ReservationResponseDto(reservation);
     }
