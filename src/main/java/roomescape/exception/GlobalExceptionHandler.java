@@ -11,7 +11,7 @@ import roomescape.exception.reservation.ReservationException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(ReservationException.class)
-    public ResponseEntity<String> handleCustomExceptions(ReservationException ex) {
+    public ResponseEntity<String> handleReservationExceptions(ReservationException ex) {
         return ResponseEntity.status(ex.getHttpStatus()).body(ex.getMessage());
     }
 
