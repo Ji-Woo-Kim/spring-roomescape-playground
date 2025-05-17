@@ -17,8 +17,4 @@ public class Reservation {
     private String name;
     private LocalDate date;
     private LocalTime time;
-
-    public static Reservation fromDto(Long id, ReservationRequestDto dto) {
-        return new Reservation(id, dto.getName(), dto.getDate(), dto.getTime());
-    }
 }
