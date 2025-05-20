@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import roomescape.dto.*;
 import roomescape.service.ReservationService;
 
+import java.net.URI;
 import java.util.*;
 
 @Controller
@@ -34,7 +35,8 @@ public class ReservationController {
     @ResponseBody
     public ResponseEntity<ReservationResponseDto> create(@Valid @RequestBody ReservationRequestDto requestDto) {
         ReservationResponseDto newReservation = reservationService.addReservation(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newReservation);
+        URI location = URI.create("/reservations/" + newReservation.getId());
+        return ResponseEntity.created(location).body(newReservation);
     }
 
     @DeleteMapping("/reservations/{id}")
