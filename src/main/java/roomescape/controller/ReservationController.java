@@ -1,21 +1,23 @@
 package roomescape.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import roomescape.domain.*;
 import roomescape.dto.*;
-import roomescape.exception.reservation.NotReservationFoundException;
+import roomescape.service.ReservationService;
 
-import java.net.URI;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicLong;
 
-@RestController
+@Controller
 public class ReservationController {
 
-    private List<Reservation> reservations = new ArrayList<>();
-    private AtomicLong index = new AtomicLong(1);
+    private final ReservationService reservationService;
+
+    public ReservationController(ReservationService reservationService) {
+        this.reservationService = reservationService;
+    }
 
     @GetMapping("/reservation")
     public String reservationPage() {
@@ -23,32 +25,22 @@ public class ReservationController {
     }
 
     @GetMapping("/reservations")
-    public ResponseEntity<List<ReservationResponseDto>> read() {
-        List<ReservationResponseDto> responseDtos = reservations.stream()
-                .map(ReservationResponseDto::new)
-                .toList();
-
-        return ResponseEntity.ok(responseDtos);
+    @ResponseBody
+    public ResponseEntity<List<ReservationResponseDto>> findAll() {
+        return ResponseEntity.ok(reservationService.findAllReservations());
     }
 
     @PostMapping("/reservations")
+    @ResponseBody
     public ResponseEntity<ReservationResponseDto> create(@Valid @RequestBody ReservationRequestDto requestDto) {
-        Reservation newReservation = Reservation.fromDto(index.getAndIncrement(), requestDto);
-        reservations.add(newReservation);
-
-        URI location = URI.create("/reservations/" + newReservation.getId());
-        return ResponseEntity.created(location).body(new ReservationResponseDto(newReservation));
+        ReservationResponseDto newReservation = reservationService.addReservation(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(newReservation);
     }
 
     @DeleteMapping("/reservations/{id}")
+    @ResponseBody
     public ResponseEntity<Void> delete(@PathVariable Long id) {
-        Reservation reservation = reservations.stream()
-                .filter(it -> Objects.equals(it.getId(), id))
-                .findFirst()
-                .orElseThrow(() -> new NotReservationFoundException("Reservation not found"));
-
-        reservations.remove(reservation);
-
+        reservationService.deleteReservation(id);
         return ResponseEntity.noContent().build();
     }
 }
