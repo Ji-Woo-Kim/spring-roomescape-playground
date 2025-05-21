@@ -4,10 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import roomescape.dto.ReservationRequestDto;
 
 import java.time.LocalDate;
-import java.time.LocalTime;
 
 @Getter
 @AllArgsConstructor
@@ -18,5 +16,5 @@ public class Reservation {
     private Long id;
     private String name;
     private LocalDate date;
-    private LocalTime time;
+    private Time time;
 }
