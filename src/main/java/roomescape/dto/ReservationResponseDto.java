@@ -8,6 +8,7 @@ import java.time.LocalTime;
 
 @Getter
 public class ReservationResponseDto {
+
     private Long id;
     private String name;
     private LocalDate date;
