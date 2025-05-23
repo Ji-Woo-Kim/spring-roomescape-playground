@@ -60,7 +60,7 @@ public class ReservationDao {
                         r.name,
                         r.date,
                         r.time_id,
-                        t.time as time_value
+                        t.time_value as time_value
                     FROM reservation r
                     INNER JOIN time t ON r.time_id = t.id
                     WHERE r.id = :id
@@ -77,7 +77,7 @@ public class ReservationDao {
                         r.name,
                         r.date,
                         r.time_id,
-                        t.time as time_value
+                        t.time_value as time_value
                     FROM reservation r
                     INNER JOIN time t ON r.time_id = t.id
                 """;
