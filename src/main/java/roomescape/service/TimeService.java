@@ -25,10 +25,8 @@ public class TimeService {
             throw new IllegalArgumentException("이미 동일한 시각이 존재합니다.");
         }
 
-        Time newTime = new Time();
-        newTime.setTimeValue(requestDto.getTimeValue());
+        Time newTime = new Time(null, requestDto.getTimeValue());
         Time saved = timeDao.save(newTime);
-
         return new TimeResponseDto(saved.getId(), saved.getTimeValue());
     }
 
