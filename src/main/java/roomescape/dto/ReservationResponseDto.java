@@ -12,12 +12,12 @@ public class ReservationResponseDto {
     private Long id;
     private String name;
     private LocalDate date;
-    private LocalTime time;
+    private LocalTime time_value;
 
     public ReservationResponseDto(Reservation reservation) {
         this.id = reservation.getId();
         this.name = reservation.getName();
         this.date = reservation.getDate();
-        this.time = reservation.getTime().getTimeValue();
+        this.time_value = reservation.getTime().getTimeValue();
     }
 }

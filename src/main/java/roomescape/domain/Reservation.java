@@ -1,16 +1,12 @@
 package roomescape.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDate;
 
-@Getter
+@Getter @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 public class Reservation {
 
     private Long id;

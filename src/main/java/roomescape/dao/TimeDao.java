@@ -27,12 +27,12 @@ public class TimeDao {
             LocalTime.parse(resultSet.getString("time_value"))
     );
 
-    public Time save(Time dto) {
+    public Time save(Time time) {
         String sql = "INSERT INTO time (time_value) VALUES (:timeValue)";
-        BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(dto);
+        BeanPropertySqlParameterSource param = new BeanPropertySqlParameterSource(time);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        namedJdbcTemplate.update(sql, params, keyHolder, new String[]{"id"});
+        namedJdbcTemplate.update(sql, param, keyHolder, new String[]{"id"});
 
         Long id = Optional.ofNullable(keyHolder.getKey())
                 .map(Number::longValue)
