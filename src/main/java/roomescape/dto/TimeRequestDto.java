@@ -7,5 +7,5 @@ import java.time.LocalTime;
 @Getter
 public class TimeRequestDto {
 
-    private LocalTime time;
+    private LocalTime timeValue;
 }

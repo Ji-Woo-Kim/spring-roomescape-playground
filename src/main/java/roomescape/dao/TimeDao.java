@@ -24,11 +24,11 @@ public class TimeDao {
 
     private final RowMapper<Time> timeRowMapper = (resultSet, rowNum) -> new Time(
             resultSet.getLong("id"),
-            LocalTime.parse(resultSet.getString("time"))
+            LocalTime.parse(resultSet.getString("time_value"))
     );
 
     public Time save(Time dto) {
-        String sql = "INSERT INTO time (time) VALUES (:time)";
+        String sql = "INSERT INTO time (time_value) VALUES (:timeValue)";
         BeanPropertySqlParameterSource params = new BeanPropertySqlParameterSource(dto);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
@@ -38,6 +38,13 @@ public class TimeDao {
                 .map(Number::longValue)
                 .orElseThrow(() -> new RuntimeException("시간 ID 생성 실패"));
         return findById(id);
+    }
+
+    public boolean existsByTime(LocalTime time) {
+        String sql = "SELECT COUNT(*) FROM time WHERE time_value = :timeValue";
+        MapSqlParameterSource param = new MapSqlParameterSource("timeValue", time);
+        Integer count = namedJdbcTemplate.queryForObject(sql, param, Integer.class);
+        return count != null && count > 0;
     }
 
     public List<Time> findAll() {

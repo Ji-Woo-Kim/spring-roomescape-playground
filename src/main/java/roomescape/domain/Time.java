@@ -13,5 +13,5 @@ import java.time.LocalTime;
 public class Time {
 
     private Long id;
-    private LocalTime time;
+    private LocalTime timeValue;
 }

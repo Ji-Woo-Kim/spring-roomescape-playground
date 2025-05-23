@@ -10,5 +10,5 @@ import java.time.LocalTime;
 public class TimeResponseDto {
 
     private Long id;
-    private LocalTime time;
+    private LocalTime timeValue;
 }

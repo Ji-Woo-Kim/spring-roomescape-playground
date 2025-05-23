@@ -18,6 +18,6 @@ public class ReservationResponseDto {
         this.id = reservation.getId();
         this.name = reservation.getName();
         this.date = reservation.getDate();
-        this.time = reservation.getTime().getTime();
+        this.time = reservation.getTime().getTimeValue();
     }
 }
