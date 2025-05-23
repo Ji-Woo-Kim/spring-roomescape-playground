@@ -65,9 +65,9 @@ public class ReservationDao {
                     INNER JOIN time t ON r.time_id = t.id
                     WHERE r.id = :id
                 """;
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource("id", id);
+        MapSqlParameterSource params = new MapSqlParameterSource("id", id);
 
-        return namedJdbcTemplate.queryForObject(sql, parameterSource, reservationRowMapper);
+        return namedJdbcTemplate.queryForObject(sql, params, reservationRowMapper);
     }
 
     public List<Reservation> findAll() {
@@ -87,13 +87,13 @@ public class ReservationDao {
 
     public void updateReservation(Long id, ReservationRequestDto dto) {
         String sql = "UPDATE reservation SET name = :name, date = :date, time_id = :timeId WHERE id = :id";
-        MapSqlParameterSource parameterSource = new MapSqlParameterSource()
+        MapSqlParameterSource params = new MapSqlParameterSource()
                 .addValue("id", id)
                 .addValue("name", dto.getName())
                 .addValue("date", dto.getDate().toString())
                 .addValue("timeId", dto.getTimeId());
 
-        namedJdbcTemplate.update(sql, parameterSource);
+        namedJdbcTemplate.update(sql, params);
     }
 
     public void deleteReservationById(Long id) {
@@ -105,4 +105,13 @@ public class ReservationDao {
             throw new NotReservationFoundException("존재하지 않는 예약입니다.");
         }
     }
+
+    public boolean existsByTimeId(Long timeId) {
+        String sql = "SELECT COUNT(*) FROM reservation WHERE time_id = :timeId";
+        MapSqlParameterSource params = new MapSqlParameterSource("timeId", timeId);
+
+        Integer count = namedJdbcTemplate.queryForObject(sql, params, Integer.class);
+        return count != null && count > 0;
+    }
+
 }

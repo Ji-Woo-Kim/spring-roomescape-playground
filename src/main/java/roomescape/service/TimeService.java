@@ -2,6 +2,7 @@ package roomescape.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import roomescape.dao.ReservationDao;
 import roomescape.dao.TimeDao;
 import roomescape.domain.Time;
 import roomescape.dto.TimeRequestDto;
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TimeService {
 
+    private final ReservationDao reservationDao;
     private final TimeDao timeDao;
 
     public TimeResponseDto saveTime(TimeRequestDto requestDto) {
@@ -37,7 +39,11 @@ public class TimeService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteTime(Long id) {
-        timeDao.deleteById(id);
+    public void deleteTime(Long timeId) {
+        if (reservationDao.existsByTimeId(timeId)) {
+            throw new IllegalStateException("해당 시각에 예약이 존재하여 삭제할 수 없습니다.");
+        }
+
+        timeDao.deleteById(timeId);
     }
 }
